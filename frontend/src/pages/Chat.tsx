@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Plus,
   Mic,
-  AudioLines,
   Menu,
   X,
-  MessageSquare,
   Settings,
   LogOut,
   Send,
@@ -33,7 +31,6 @@ const Chat: React.FC = () => {
   const [testQueue, setTestQueue] = useState<string[]>([]);
   const [toolCalls, setToolCalls] = useState<{name: string, input: string}[]>([]);
   const [thinkingSteps, setThinkingSteps] = useState<{type: string, name?: string, input?: string, result?: string}[]>([]);
-  const [lastThinkingTrace, setLastThinkingTrace] = useState<{type: string, name?: string, input?: string, result?: string}[]>([]);
   const [liveAnalysis, setLiveAnalysis] = useState<string>('');
   const socketRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -75,7 +72,6 @@ const Chat: React.FC = () => {
         setLiveAnalysis('');
       }
       if (status === 'idle') {
-        setLastThinkingTrace([...thinkingStepsRef.current]);
         setToolCalls([]);
       }
     });
@@ -394,9 +390,9 @@ const Chat: React.FC = () => {
                           <pre className="text-slate-500 bg-slate-50 rounded-lg p-3 overflow-x-auto text-[11px] leading-relaxed max-h-48 overflow-y-auto border border-slate-100 whitespace-pre-wrap">
                             {(() => {
                               try {
-                                return JSON.stringify(JSON.parse(step.result), null, 2);
+                                return step.result ? JSON.stringify(JSON.parse(step.result), null, 2) : '';
                               } catch (e) {
-                                return step.result;
+                                return step.result || '';
                               }
                             })()}
                           </pre>
@@ -437,9 +433,9 @@ const Chat: React.FC = () => {
                           <pre className="text-slate-500 bg-slate-50 rounded-lg p-3 overflow-x-auto text-[11px] leading-relaxed max-h-48 overflow-y-auto border border-slate-100 whitespace-pre-wrap">
                             {(() => {
                               try {
-                                return JSON.stringify(JSON.parse(step.result), null, 2);
+                                return step.result ? JSON.stringify(JSON.parse(step.result), null, 2) : '';
                               } catch (e) {
-                                return step.result;
+                                return step.result || '';
                               }
                             })()}
                           </pre>
